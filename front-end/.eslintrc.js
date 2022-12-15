@@ -80,7 +80,7 @@ module.exports = {
     quotes: ['error', 'single'],
     'no-negated-condition': 'error',
     'no-nested-ternary': 'error',
-    eqeqeq: ['error', 'always', { null: 'never' }],
+    eqeqeq: ['error', 'always', { null: 'always' }],
     'no-new-wrappers': 'error',
     'no-proto': 'error',
     'prefer-template': 'error',

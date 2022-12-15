@@ -1,7 +1,10 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { staticRoutes, asyncRoutes } from './static';
+import { createRouter, createWebHistory, RouteRecordName } from 'vue-router'
+import cookie from 'js-cookie'
+import { staticRoutes, asyncRoutes } from './static'
 
-// import { getAuthToken } from '@/utils/storage'
+const allowList:RouteRecordName[] = ['login']
+const loginRoute = '/user/login'
+const indexRoute = '/index'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -10,7 +13,21 @@ const router = createRouter({
 // todo，加载路由后，根据用户role进行过滤
 
 router.beforeEach((to, from, next) => {
-  next()
+  const token = cookie.get('token');
+  if (token && token !== 'undefined') {
+    if (to.path === loginRoute) {
+      next({ path: indexRoute });
+    } else {
+      // todo:获取存在cookie中的用户信息到store
+      next()
+    }
+  } else {
+    if (allowList.includes(to.name || '')) {
+      next()
+    } else {
+      next({ path: loginRoute });
+    }
+  }
 })
 
 // 路由加载后

@@ -9,11 +9,18 @@
           <div class="nav-item">提交测试</div>
         </div>
       </div>
-      <div class="header-right"></div>
+      <div class="header-right">
+        {{userInfoStore.userInfo.username}}
+        <el-popconfirm title="登出系统？" @confirm="userLogout">
+          <template #reference>
+            <el-icon class="logout-btn"><SwitchButton /></el-icon>
+          </template>
+        </el-popconfirm>
+      </div>
     </el-header>
     <el-container>
       <el-aside width="250px">
-        <el-menu>
+        <el-menu router>
           <el-sub-menu index="1">
             <template #title>
               <span>解决方案性能基线</span>
@@ -32,6 +39,19 @@
             <el-menu-item index="2-4">网络</el-menu-item>
             <el-menu-item index="2-5">基础库</el-menu-item>
           </el-sub-menu>
+          <el-sub-menu index="3">
+            <template #title>
+              <span>我的申请</span>
+            </template>
+            <el-menu-item index="/userCenter/application/applicationList">所有申请</el-menu-item>
+            <el-menu-item index="3-2">新建申请</el-menu-item>
+          </el-sub-menu>
+          <el-sub-menu index="4">
+            <template #title>
+              <span>我的审批</span>
+            </template>
+            <el-menu-item index="/userCenter/approval/approveList">所有审批</el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </el-aside>
       <el-main>
@@ -44,6 +64,20 @@
   </el-container>
 </template>
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { useUserInfo } from '@/stores/userInfo'
+import { ElMessage } from 'element-plus';
+
+const router = useRouter()
+const userInfoStore = useUserInfo()
+
+const userLogout = () => {
+  userInfoStore.userLogout().then(() => {
+    router.push('/user/login')
+  }).catch(err => {
+    ElMessage.error(err.message)
+  })
+}
 
 </script>
 <style scoped lang="scss">
@@ -55,6 +89,7 @@
     line-height: $header-height;
     background: var(--oe-perf-color-primary);
     color: var(--oe-perf-font-color);
+    justify-content: space-between;
     .header-left {
       display: flex;
       .logo {
@@ -77,6 +112,14 @@
         &.active {
           border-bottom: 2px solid var(--oe-perf-font-color);
         }
+      }
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      .logout-btn {
+        margin-left: 10px;
+        cursor: pointer;
       }
     }
   }

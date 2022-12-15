@@ -3,21 +3,15 @@
 #### 介绍
 The repository of the lastest version of openEuler Performance Test website
 
-#### 软件架构
-软件架构说明
+#### 运行项目
 
+```
+# install dependencies
+1.  pnpm install
 
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+# serve with hot reload at localhost:8080
+2.  pnpm run serve
+```
 
 #### 参与贡献
 

@@ -15,7 +15,7 @@
                 <el-input v-model="loginForm.password" show-password/>
               </el-form-item>
               <el-form-item>
-                <el-button class="login-btn" type="primary">登录</el-button>
+                <el-button class="login-btn" type="primary" @click="loginRequest">登录</el-button>
               </el-form-item>
             </el-form>
           </el-tab-pane>
@@ -30,6 +30,13 @@
   
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus'
+
+import { useUserInfo } from '@/stores/userInfo'
+
+const userInfoStore = useUserInfo()
+const router = useRouter()
 
 const loginType = ref('username')
 
@@ -37,6 +44,16 @@ const loginForm = reactive({
   username: '',
   password: ''
 })
+
+const loginRequest = () => {
+  userInfoStore.userLogin(loginForm.username, loginForm.password)
+    .then(() => {
+      ElMessage.success('登陆成功')
+      router.push('/index')
+    }).catch((err) => {
+      ElMessage.error(err.message)
+    })
+}
 </script>
   
 <style lang="scss" scoped>
@@ -71,11 +88,11 @@ const loginForm = reactive({
       top: 30vh;
       left: 50%;
       margin-left: -150px;
+      :deep(.el-tabs__header) {
+        padding-left: 40px;
+      }
       :deep(.el-tabs__nav-wrap:after) {
         display: none;
-      }
-      :deep(.el-tabs__nav-scroll) {
-        padding-left: 40px;
       }
       .username-login-form {
         margin-top:20px;

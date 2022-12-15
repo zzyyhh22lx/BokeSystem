@@ -3,20 +3,15 @@
 #### Description
 The repository of the lastest version of openEuler Performance Test website
 
-#### Software Architecture
-Software architecture description
+#### Build Setup
 
-#### Installation
+```
+# install dependencies
+1.  npm install
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### Instructions
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+# serve with hot reload at localhost:8080
+2.  npm run serve
+```
 
 #### Contribution
 

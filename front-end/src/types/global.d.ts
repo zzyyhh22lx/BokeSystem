@@ -1,15 +1,6 @@
-interface anyObj {
-    [key:string]:any
-}
-
-interface storageData {
-    [key:string]: string
-}
-
-declare module '@/components/locale-control/core' {
-    export default function useLang(lang: 'zh-CN' | 'en'): null
-}
-
-interface KStringObj {
-  [key: string]: any
+// 全局类型声明在这里
+declare module 'js-cookie' {
+  export function set(key:string, data:object, opt:object): void
+  export function get(key:string): string
+  export function remove(key: string): void
 }
