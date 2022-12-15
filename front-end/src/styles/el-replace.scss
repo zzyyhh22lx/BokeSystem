@@ -1,0 +1,29 @@
+// button
+.el-button {
+  &--primary {
+    --el-button-bg-color: var(--oe-perf-color-primary);
+    --el-button-border-color: var(--oe-perf-color-primary);
+    --el-button-hover-bg-color: var(--oe-perf-color-secondary);
+    --el-button-hover-border-color: var(--oe-perf-color-secondary);
+    --el-button-active-bg-color: var(--oe-perf-color-third);
+    --el-button-active-border-color: var(--oe-perf-color-third);
+  }
+  &:focus {
+    background: var(--oe-perf-color-primary);
+    border-color: var(--oe-perf-color-primary);
+  }
+  &:active {
+    background: var(--oe-perf-color-third);
+    border-color: var(--oe-perf-color-third);
+  }
+}
+
+//tab
+.el-tabs {
+  &__item.is-active {
+    color: var(--oe-perf-color-primary);
+  }
+  &__active-bar {
+    background: var(--oe-perf-color-primary);
+  }
+}
