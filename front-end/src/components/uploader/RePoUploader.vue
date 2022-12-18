@@ -10,17 +10,17 @@
       </template>
       <div class="el-drawer-form">
         <el-form :model="form">
-          <el-form-item label="测试场景：">
+          <el-form-item label="分类：">
             <el-cascader
             class="my-el-cascader"
-            v-model="form.region" placeholder="请选择测试场景" :options="options" :disabled="disabled"/>
+            v-model="form.region" placeholder="请选择分类" :options="options" :disabled="disabled"/>
           </el-form-item>
           <el-form-item label="上传文件：">
             <el-upload
               v-model:file-list="fileList"
               class="upload-demo"
               multiple
-              accept=".xlsx"
+              accept=".md"
               :limit="1"
               :http-request="handleUpload"
             >
@@ -31,7 +31,7 @@
               <template #tip>
               <span class="btn-a-margin"><a @click.stop="download">下载模板</a></span>
                 <div class="el-upload__tip">
-                  支持扩展名：.xlsx...
+                  支持扩展名：.md...
                 </div>
               </template>
             </el-upload>
@@ -66,9 +66,9 @@ const emit = defineEmits<{
   (e:'handleClose'):void
 }>()
 const props = withDefaults(defineProps<{
-  bool,
-  region,
-  options: Array,
+  bool: any,
+  region: any,
+  options: Array<any>,
   title: string,
   description: string,
   btnText: string,
@@ -79,14 +79,11 @@ const props = withDefaults(defineProps<{
   region: reactive([]),
   options: () => [
     {
-      value: '大数据',
-      label: '大数据',
-      children: [
-        {
-          value: 'spark',
-          label: 'spark'
-        }
-      ],
+      value: '前端',
+      label: '前端'
+    },{
+      value: '后端',
+      label: '后端'
     }
   ],
   title: '新建申请',
@@ -97,6 +94,9 @@ const props = withDefaults(defineProps<{
 const { bool, title, description, options, region, btnText, disabled } = toRefs(props)
 const centerDialogVisible = ref(false)
 const fileNameBool = ref(false)
+
+const data = ref<any>('') // 存放解析的数据
+
 const form = reactive({
   region: ''
 })
@@ -105,65 +105,43 @@ watchEffect(()=>{
   form.region = region
 })
 
-const cancel:void = () => {
+const cancel = () => {
   emit('cancel')
 }
 
-const upload:void = () => {
+const upload = () => {
   if(fileNameBool.value)
     emit('upload', data)
-  else ElMessage.error('请上传 .xlsx 的文件')
+  else ElMessage.error('请上传 .md 的文件')
 }
 
-const handleClose:void = () => {
+const handleClose = () => {
   emit('handleClose')
 }
 
 const fileList = ref<UploadUserFile[]>([])
 
-const data = reactive({
-  data: {}
-})
-
-const handleUpload = (uploadFiles) => {
+// 解析上传的md文件
+const handleUpload = (uploadFiles: any) => {
   const fileReader = new FileReader()
   fileReader.readAsText(uploadFiles.file)
-  if(uploadFiles.file.name.split('.').pop() === 'xlsx') {
+  if(uploadFiles.file.name.split('.').pop() === 'md') {
     fileNameBool.value = true
     fileReader.onload = function() {
-      data.data = {}
-      let content = this.result.toString().split('\r\n').filter(item => item !== '').map(item => item.split('\t'));
-      for(let i = 0; i < content[0].length; i++) {
-        content[1] = content[1]?content[1]:[]
-        try {
-          let dt = content[1][i].replace(/""/g, '"')
-          if(content[1][i][0] === '"') data.data[content[0][i]] = JSON.parse(dt.slice(1,-1))
-          else data.data[content[0][i]] = JSON.parse(dt)
-        } catch (e) {
-          data.data[content[0][i]] = content[1][i]
-        }
-      }
+      data.value = this.result
     }
   }
 }
 function download() {
-  // values可以从后端获取数据
-  let values = ['aaa','bbb','ccc','ddd','eee']
-  // 列标题，逗号隔开，每一个逗号就是隔开一个单元格
-  let str = ''
-  // 增加\t为了不让表格显示科学计数法或者其他格式
-  for (let i = 0; i < values.length; i++) {
-    str += `${values[i]},`
-  }
-  // 一个回车（'\n'）表示一行数据
-  str += '\n'
+  // str可以从后端获取数据
+  let str = '# 这是一个md文件'
   // encodeURIComponent解决中文乱码
   let url = `data:text/csv;charset=utf-8,\ufeff${encodeURIComponent(str)}`
   // 通过创建a标签实现
   let link = document.createElement('a')
   link.href = url
   // 对下载的文件命名
-  link.download = 'template.xlsx'
+  link.download = 'template.md'
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)

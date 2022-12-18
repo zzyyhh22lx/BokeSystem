@@ -2,12 +2,12 @@
   <el-container>
     <el-header class="basic-layout-header">
       <div class="header-left">
-        <h5 class="logo">openEuler</h5>
-        <div class="header-nav">
+        <h5 class="logo">Boke System</h5>
+        <!-- <div class="header-nav">
           <div class="nav-item active">性能基线</div>
           <div class="nav-item">性能测试</div>
           <div class="nav-item">提交测试</div>
-        </div>
+        </div> -->
       </div>
       <div class="header-right">
         {{userInfoStore.userInfo.username}}
@@ -23,7 +23,7 @@
         <el-menu router>
           <el-sub-menu index="1">
             <template #title>
-              <span>解决方案性能基线</span>
+              <span>主页</span>
             </template>
             <el-menu-item index="1-1">大数据</el-menu-item>
             <el-menu-item index="1-2">数据库</el-menu-item>
@@ -31,7 +31,7 @@
           </el-sub-menu>
           <el-sub-menu index="2">
             <template #title>
-              <span>基础性能基线</span>
+              <span>成员</span>
             </template>
             <el-menu-item index="2-1">CPU</el-menu-item>
             <el-menu-item index="2-2">内存</el-menu-item>
@@ -41,21 +41,22 @@
           </el-sub-menu>
           <el-sub-menu index="3">
             <template #title>
-              <span>我的申请</span>
+              <span>我的</span>
             </template>
-            <el-menu-item index="/userCenter/application/applicationList">所有申请</el-menu-item>
-            <el-menu-item index="3-2">新建申请</el-menu-item>
+            <el-menu-item index="/userCenter/index">我的主页</el-menu-item>
+            <el-menu-item index="/userCenter/application/applicationList">我的申请</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="4">
+            <!-- 只有管理员才会显示 -->
             <template #title>
-              <span>我的审批</span>
+              <span>审批</span>
             </template>
             <el-menu-item index="/userCenter/approval/approveList">所有审批</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-aside>
       <el-main>
-        <div class="breadcrumb-nav">面包屑/导航</div>
+        <!-- <div class="breadcrumb-nav">面包屑/导航</div> -->
         <div class="basic-layout-content">
           <router-view></router-view>
         </div>
@@ -87,7 +88,7 @@ const userLogout = () => {
     display: flex;
     height: $header-height;
     line-height: $header-height;
-    background: var(--oe-perf-color-primary);
+    background: var(--oe-perf-header-color);
     color: var(--oe-perf-font-color);
     justify-content: space-between;
     .header-left {

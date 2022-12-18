@@ -53,7 +53,7 @@ const props = withDefaults(defineProps<{
   tableData: Object
 }>(),
 {
-  tableData: ()=>{}
+  tableData: ()=>{ return {} }
 })
 const { tableData } = toRefs(props)
 const state = reactive({
@@ -70,7 +70,7 @@ const handleSelectionChange = (val: User[]) => {
 
 function judgeLevelColor(type: string) {
   type = type.slice(2,-1)
-  let levelColor = {
+  let levelColor:any = {
     '1': () => { return '#43BB57' },
     '2': () => { return '#FFD581' },
     '3': () => { return '#FFA634' },
@@ -81,7 +81,7 @@ function judgeLevelColor(type: string) {
 }
 
 function judgeProgressColor(type: string) {
-  let progressColor = {
+  let progressColor:any = {
     // '未提交': () => { return '#C9C9C9' },
     '待审批': () => { return '#002FA7' },
     '已发布': () => { return '#43BB57' },
@@ -91,7 +91,7 @@ function judgeProgressColor(type: string) {
   return (progressColor[type] || progressColor['default'])()
 }
 
-function pushView(obj) {
+function pushView(obj:any) {
   emit('pushView', obj)
 }
 </script>

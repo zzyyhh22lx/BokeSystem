@@ -89,6 +89,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import type { FormRules } from 'element-plus'
 import { useRoute } from 'vue-router'
+
 const indexNum = ref(1)
 
 const route = useRoute()
@@ -109,7 +110,7 @@ const onSubmit = () => {
 }
 
 function judgeProgress(type: string) {
-  let progress = {
+  let progress:any = {
     // '未提交': () => { return 1 },
     '待审批': () => { return 2 },
     'default': () => { return 3 }

@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import { ref,reactive,onMounted } from 'vue'
-import { getApplicationList } from '@/api/center/index.ts'
+import { getApplicationList } from '@/api/center'
 import { Search } from '@element-plus/icons-vue'
 import { useRouter, useRoute } from 'vue-router'
 import  ApplicationTable  from '../components/application-table.vue'
@@ -67,11 +67,12 @@ const select = ref('')
 const value = ref('')
 const dialogVisible = ref(false)
 
+const data:any = []
 const tableData = reactive({
-  data: []
+  data
 })
 const propsData = reactive({
-  data: []
+  data
 })
 
 function inputValue() {
@@ -90,7 +91,7 @@ function changeSelect() {
   propsData.data = [tableData.data[hashData.get(select.value)]]
 }
 
-function intoView(query) {
+function intoView(query:any) {
   let path = '/userCenter/application/applicationProgress'
   if(route.meta.title === 'approveList')
     path = '/userCenter/approval/approvalprogress'
@@ -110,7 +111,7 @@ onMounted(() => {
     .then((data) => {
       tableData.data = data.data.data
       propsData.data = data.data.data
-      tableData.data.forEach((item, index) => {
+      tableData.data.forEach((item:any, index:any) => {
         hashData.set(item.requestCode, index)
       })
     })

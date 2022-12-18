@@ -1,29 +1,21 @@
 <template>
   <div class="oe-perf-section">
-    template1
+    <v-md-editor :model-value="markdown" mode="preview"></v-md-editor>
   </div>
   <div class="oe-perf-section">
-    <el-button @click="getDetailData">测试数据</el-button>
+    <v-md-editor :model-value="markdown"></v-md-editor>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { getDetail } from '@/api/detail'
-
 const router = useRouter()
-
+const markdown = ref('```你好 ```')
 onMounted(() => {
   console.log(router)
 })
-
-const getDetailData = () => {
-  getDetail(10).then((res) => {
-    console.log(res.data.results)
-  })
-}
 </script>
 
 <style>

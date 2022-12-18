@@ -1,7 +1,7 @@
 <template>
   <div class="oe-perf-login">
     <div class="left-content">
-      <h3 class="logo-title">openEuler</h3>
+      <div class="logo-title typing">Boke System <br/>一个博客管理系统</div>
     </div>
     <div class="right-content">
       <div class="login-container">
@@ -61,21 +61,26 @@ const loginRequest = () => {
     width: 100%;
     height: 100%;
     display: flex;
+    .overall-header-left {
+        align-self: center;
+        justify-self: center;
+        color: var(--oe-perf-font-color);
+      }
+      .logo-title {
+        width: 100%;
+        margin-top: 25%;
+        text-align: center;
+        font-size: 50px;
+        font-weight: 900;
+        color: var(--oe-perf-font-color);
+      }
     .left-content {
       width: 50%;
       height: 100%;
-      background: url('@/assets/login-bg.png') no-repeat;
-      background-size: 100% auto;
+      background: url('@/assets/login-bg2.png') no-repeat;
+      background-size: cover;
       background-position: center;
       background-color: #cbd8ed;
-      .logo-title {
-        position: absolute;
-        left: 2%;
-        top: 2%;
-        font-size: 50px;
-        font-weight: 900;
-        color: var(--oe-perf-color-primary);
-      }
     }
     .right-content {
       width: 50%;
