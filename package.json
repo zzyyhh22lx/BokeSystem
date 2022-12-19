@@ -1,10 +1,20 @@
 {
-  "devDependencies": {
-    "@commitlint/cli": "^17.3.0",
-    "@commitlint/config-conventional": "^17.3.0",
-    "husky": "^8.0.2"
-  },
+  "name": "my_boke",
+  "version": "1.0.0",
+  "description": "一个前端基于vue3+ts+elementplus+vue3markdown，后端基于koa2的博客系统",
+  "devDependencies": {},
   "scripts": {
-    "prepare": "husky install"
-  }
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zzyyhh22lx/Vue3Boke.git"
+  },
+  "keywords": [],
+  "author": "lhy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zzyyhh22lx/Vue3Boke/issues"
+  },
+  "homepage": "https://github.com/zzyyhh22lx/Vue3Boke#readme"
 }
