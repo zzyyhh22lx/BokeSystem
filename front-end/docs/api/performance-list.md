@@ -3,15 +3,7 @@
 
 ### 1.1 需求链接
 
-https://r.huaweistatic.com/s/kunpengstatic/lst/files/pdf/ecosystem/ecology_remit/20220630170008.pdf
-
-### 1.2 功能描述
-> 性能基线/性能测试页面：用户在网页左侧导航栏上选择基础性能（CPU/内存/存储/网络/基础库）中一个特性，右侧实现某个测试组件所有的测试数据展示
-> 对比检索页面：
-
-### 1.3 功能原型设计
-
-https://modao.cc/app/IUs90Nvri8odsTP3U18oR#screen=sl82p1aoqxqf18o
+### 
 
 ## 2. 方案设计
 
