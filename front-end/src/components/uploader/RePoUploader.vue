@@ -156,7 +156,7 @@ a {
   cursor: pointer;
 }
 a:active {
-  color: var(--oe-perf-color-secondary);
+  color: var(--hy-boke-color-secondary);
 }
 .el-drawer-header {
   display: block;

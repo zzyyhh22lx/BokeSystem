@@ -1,29 +1,35 @@
 // button
 .el-button {
   &--primary {
-    --el-button-bg-color: var(--oe-perf-color-primary);
-    --el-button-border-color: var(--oe-perf-color-primary);
-    --el-button-hover-bg-color: var(--oe-perf-color-secondary);
-    --el-button-hover-border-color: var(--oe-perf-color-secondary);
-    --el-button-active-bg-color: var(--oe-perf-color-third);
-    --el-button-active-border-color: var(--oe-perf-color-third);
+    --el-button-bg-color: var(--hy-boke-color-primary);
+    --el-button-border-color: var(--hy-boke-color-primary);
+    --el-button-hover-bg-color: var(--hy-boke-color-secondary);
+    --el-button-hover-border-color: var(--hy-boke-color-secondary);
+    --el-button-active-bg-color: var(--hy-boke-color-third);
+    --el-button-active-border-color: var(--hy-boke-color-third);
+    --el-menu-hover-bg-color: var(--hy-boke-color-secondary);
   }
   &:focus {
-    background: var(--oe-perf-color-primary);
-    border-color: var(--oe-perf-color-primary);
+    background: var(--hy-boke-color-primary);
+    border-color: var(--hy-boke-color-primary);
   }
   &:active {
-    background: var(--oe-perf-color-third);
-    border-color: var(--oe-perf-color-third);
+    background: var(--hy-boke-color-third);
+    border-color: var(--hy-boke-color-third);
   }
 }
 
 //tab
 .el-tabs {
   &__item.is-active {
-    color: var(--oe-perf-color-primary);
+    color: var(--hy-boke-color-primary);
   }
   &__active-bar {
-    background: var(--oe-perf-color-primary);
+    background: var(--hy-boke-color-primary);
+  }
+}
+.el-sub-menu__title {
+  &:hover {
+    --el-menu-hover-bg-color: var(--hy-boke-color-shallow);
   }
 }

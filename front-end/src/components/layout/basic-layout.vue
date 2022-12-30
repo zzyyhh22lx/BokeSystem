@@ -10,7 +10,7 @@
         </div> -->
       </div>
       <div class="header-right">
-        {{userInfoStore.userInfo.username}}
+        {{ getCookie('user_name') }}
         <el-popconfirm title="登出系统？" @confirm="userLogout">
           <template #reference>
             <el-icon class="logout-btn"><SwitchButton /></el-icon>
@@ -29,15 +29,11 @@
             <el-menu-item index="1-2">数据库</el-menu-item>
             <el-menu-item index="1-3">分布式存储</el-menu-item>
           </el-sub-menu>
-          <el-sub-menu index="2">
+          <el-sub-menu index="2" v-for="item in users" :key="item">
             <template #title>
               <span>成员</span>
             </template>
-            <el-menu-item index="2-1">CPU</el-menu-item>
-            <el-menu-item index="2-2">内存</el-menu-item>
-            <el-menu-item index="2-3">存储</el-menu-item>
-            <el-menu-item index="2-4">网络</el-menu-item>
-            <el-menu-item index="2-5">基础库</el-menu-item>
+            <el-menu-item index="2-1">item</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="3">
             <template #title>
@@ -53,6 +49,12 @@
             </template>
             <el-menu-item index="/userCenter/approval/approveList">所有审批</el-menu-item>
           </el-sub-menu>
+          <el-sub-menu index="5">
+            <template #title>
+              <span>面经</span>
+            </template>
+            <el-menu-item index="5-1">前端</el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </el-aside>
       <el-main>
@@ -66,8 +68,11 @@
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { onMounted, reactive } from 'vue';
 import { useUserInfo } from '@/stores/userInfo'
 import { ElMessage } from 'element-plus';
+import { getCookie } from '@/utils/tools/index'
+import { getUsers } from '@/api/center/index'
 
 const router = useRouter()
 const userInfoStore = useUserInfo()
@@ -80,6 +85,19 @@ const userLogout = () => {
   })
 }
 
+const users = reactive([] as any[]); // 断言类型处理
+
+onMounted(async () => {
+  try {
+    const result = await getUsers()
+    const { data } = result.data
+    data.forEach((user:string) => {
+      users.push(user)
+    })
+  } catch (e) {
+    console.error(e)
+  }
+})
 </script>
 <style scoped lang="scss">
   $header-height: 56px;
@@ -88,8 +106,8 @@ const userLogout = () => {
     display: flex;
     height: $header-height;
     line-height: $header-height;
-    background: var(--oe-perf-header-color);
-    color: var(--oe-perf-font-color);
+    background: var(--hy-boke-header-color);
+    color: var(--hy-boke-font-color);
     justify-content: space-between;
     .header-left {
       display: flex;
@@ -102,7 +120,7 @@ const userLogout = () => {
     .header-nav {
       display: flex;
       align-items: center;
-      padding-left: var(--oe-perf-padding);
+      padding-left: var(--hy-boke-padding);
       .nav-item {
         height: 36px;
         line-height: 36px;
@@ -111,7 +129,7 @@ const userLogout = () => {
           margin-left: 20px;
         }
         &.active {
-          border-bottom: 2px solid var(--oe-perf-font-color);
+          border-bottom: 2px solid var(--hy-boke-font-color);
         }
       }
     }
@@ -127,14 +145,14 @@ const userLogout = () => {
   .breadcrumb-nav {
     height: $breadcrumb-nav-height;
     line-height: $breadcrumb-nav-height;
-    padding-left: var(--oe-perf-padding);
+    padding-left: var(--hy-boke-padding);
   }
   .el-main {
     padding: 0;
   }
   .basic-layout-content {
     height: calc(100vh - $header-height - $breadcrumb-nav-height);
-    background: var(--oe-perf-bg-layout);
-    padding: var(--oe-perf-padding);
+    background: var(--hy-boke-bg-layout);
+    padding: var(--hy-boke-padding);
   }
 </style>

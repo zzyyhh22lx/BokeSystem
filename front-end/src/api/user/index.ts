@@ -1,16 +1,18 @@
 import createAxios from '@/utils/request/axios';
 
 const api = {
-  userLogin: '/test/login/',
-  userLogout: '/test/logout'
+  userLogin: '/users/login',
+  userLogout: '/users/logout',
+  userRegister: '/users/register',
+  userGetCapcha: '/users/getcaptcha'
 }
 
-export function userlogin(username: string, password: string) {
+export function userlogin(email: string, password: string) {
   return createAxios({
     url: api.userLogin,
     method: 'post',
     data: {
-      username,
+      email,
       password
     }
   })
@@ -20,5 +22,27 @@ export function userlogout() {
   return createAxios({
     url: api.userLogout,
     method: 'post',
+  })
+}
+
+export function userRegister(email: string, password: string, captcha:string) {
+  return createAxios({
+    url: api.userRegister,
+    method: 'post',
+    data: {
+      email,
+      password,
+      captcha
+    }
+  })
+}
+
+export function userGetCapcha(email: string) {
+  return createAxios({
+    url: api.userGetCapcha,
+    method: 'post',
+    data: {
+      email
+    }
   })
 }

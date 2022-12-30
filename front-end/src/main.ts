@@ -4,7 +4,7 @@ import router from './router'
 import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
 
-import './mock'
+// import './mock'
 
 // 组件工具
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'

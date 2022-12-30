@@ -3,7 +3,7 @@
        ref="multipleTableRef"
        :data="state.data"
        :default-sort="{ prop: 'date', order: 'descending' }"
-       style="width: 100%; margin-top: var(--oe-perf-padding);"
+       style="width: 100%; margin-top: var(--hy-boke-padding);"
        @selection-change="handleSelectionChange"
      >
        <el-table-column prop="requestCode" label="申请单号">

@@ -127,7 +127,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-$margin-size: calc(var(--oe-perf-padding) + var(--oe-perf-approval-icon-size));
+$margin-size: calc(var(--hy-boke-padding) + var(--hy-boke-approval-icon-size));
 $margin-icon-line: 6px;
 $pass-color: rgba(0,47,167,0.6);
 $txt-color: #002FA7;
@@ -135,11 +135,11 @@ $bg-color: #002FA7;
 $item-border-color: #C9C9C9;
 
 h4 {
-  font-size: var(--oe-perf-font-size-header);
+  font-size: var(--hy-boke-font-size-header);
   margin-bottom: 14px;
 }
 p {
-  font-size: var(--oe-perf-font-size-body);
+  font-size: var(--hy-boke-font-size-body);
   margin-bottom: 25px;
 }
 .time-line {
@@ -153,7 +153,7 @@ p {
   width: calc(100% - $margin-size); /*因为左边部分用于显示时间线，所以右边部分减去30px*/
   height: auto; /*高度由内容决定*/
   position: relative;
-  margin-bottom: var(--oe-perf-approval-icon-size);
+  margin-bottom: var(--hy-boke-approval-icon-size);
 }
 .item::before {
   content: "";
@@ -166,8 +166,8 @@ p {
   z-index: 1;
   overflow: hidden;
 
-  width: var(--oe-perf-approval-icon-size);
-  height: var(--oe-perf-approval-icon-size);
+  width: var(--hy-boke-approval-icon-size);
+  height: var(--hy-boke-approval-icon-size);
   font-size: 20px;
   color: $item-border-color;
   border: 2px solid $item-border-color;
@@ -176,8 +176,8 @@ p {
 .item::after {
   content: "";
   position: absolute;
-  top: calc(var(--oe-perf-approval-icon-size) + $margin-icon-line);
-  left: calc(0px - var(--oe-perf-approval-icon-size) / 2 - var(--oe-perf-padding));
+  top: calc(var(--hy-boke-approval-icon-size) + $margin-icon-line);
+  left: calc(0px - var(--hy-boke-approval-icon-size) / 2 - var(--hy-boke-padding));
   z-index: 0;
   overflow: hidden;
 
@@ -199,7 +199,7 @@ p {
   content: "";
   background: url("@/assets/svg/pass.svg") no-repeat center;
   border: 2px solid $pass-color;
-  color: var(--oe-perf-color-secondary);
+  color: var(--hy-boke-color-secondary);
 }
 .item-accomplished::after {
   background-color: $pass-color;
@@ -207,7 +207,7 @@ p {
 .item-index::before {
   background-color: $bg-color;
   border: 0;
-  color: var(--oe-perf-font-color);
+  color: var(--hy-boke-font-color);
 }
 .item-end::after {
   content: "";
@@ -216,8 +216,8 @@ p {
 }
 .item-message {
   margin-top: 10px;
-  color: var(--oe-perf-approval-normal-color);
-  font-size: var(--oe-perf-font-size-body);
+  color: var(--hy-boke-approval-normal-color);
+  font-size: var(--hy-boke-font-size-body);
   float: left;
   text-align: left;
   margin-bottom: 14px;
@@ -232,7 +232,7 @@ p {
 }
 .item-bold-message {
   color: #333333;
-  font-size: var(--oe-perf-font-size-body);
+  font-size: var(--hy-boke-font-size-body);
   font-weight: bold;
 }
 .item-margin {
@@ -249,12 +249,12 @@ p {
   padding: $margin-icon-line;
   border-left: 2px solid $item-border-color;
   color: $txt-color;
-  font-size: var(--oe-perf-font-size-header);
+  font-size: var(--hy-boke-font-size-header);
 }
 
 </style>
 <style lang="scss">
 .item-hr .item-txt {
-  font-size: var(--oe-perf-font-size-caption)!important;
+  font-size: var(--hy-boke-font-size-caption)!important;
 }
 </style>

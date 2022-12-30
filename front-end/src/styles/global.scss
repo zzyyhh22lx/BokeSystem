@@ -20,11 +20,11 @@ body,
 }
 
 .oe-perf-section {
-  background: var(--oe-perf-bg-section);
-  padding: var(--oe-perf-padding);
+  background: var(--hy-boke-bg-section);
+  padding: var(--hy-boke-padding);
   border-radius: 3px;
   box-shadow: var(--el-box-shadow-lighter);
   &:not(:last-child) {
-    margin-bottom: var(--oe-perf-padding);
+    margin-bottom: var(--hy-boke-padding);
   }
 }

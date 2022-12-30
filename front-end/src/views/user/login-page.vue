@@ -6,10 +6,10 @@
     <div class="right-content">
       <div class="login-container">
         <el-tabs v-model="loginType" class="demo-tabs">
-          <el-tab-pane label="帐号密码登录" name="username">
-            <el-form :model="loginForm" class="username-login-form">
-              <el-form-item label="帐号">
-                <el-input v-model="loginForm.username" />
+          <el-tab-pane label="邮箱密码登录" name="login">
+            <el-form :model="loginForm" class="user-login-form">
+              <el-form-item label="邮箱">
+                <el-input v-model="loginForm.email" />
               </el-form-item>
               <el-form-item label="密码">
                 <el-input v-model="loginForm.password" show-password/>
@@ -19,8 +19,28 @@
               </el-form-item>
             </el-form>
           </el-tab-pane>
-          <el-tab-pane label="手机号登录" name="tel">
-            <!--待确认是否支持-->
+          <el-tab-pane label="邮箱注册" name="register">
+            <el-form :model="registerForm" class="user-login-form">
+              <el-form-item label="邮箱">
+                <el-input v-model="registerForm.email" />
+              </el-form-item>
+              <el-form-item label="密码">
+                <el-input v-model="registerForm.password" show-password/>
+              </el-form-item>
+              <el-form-item label="验证">
+                <el-row :gutter="20">
+                  <el-col :span="12">
+                    <el-input v-model="registerForm.captcha"/>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-button class="login-btn" type="info" @click="getCaptcha">获取验证码</el-button>
+                  </el-col>
+                </el-row>
+              </el-form-item>
+              <el-form-item>
+                <el-button class="login-btn" type="primary" @click="registerRequest">注册</el-button>
+              </el-form-item>
+            </el-form>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -32,27 +52,70 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus'
-
 import { useUserInfo } from '@/stores/userInfo'
+import { throttle } from '@/utils/tools/index'
+import { userRegister, userGetCapcha } from '@/api/user/index'
 
 const userInfoStore = useUserInfo()
 const router = useRouter()
 
-const loginType = ref('username')
+const loginType = ref('login')
 
 const loginForm = reactive({
-  username: '',
+  email: '',
   password: ''
 })
 
-const loginRequest = () => {
-  userInfoStore.userLogin(loginForm.username, loginForm.password)
+const registerForm = reactive({
+  email: '',
+  password: '',
+  captcha: ''
+})
+
+const throttle_login = throttle(() => {
+  userInfoStore.userLogin(loginForm.email, loginForm.password)
     .then(() => {
       ElMessage.success('登陆成功')
       router.push('/index')
     }).catch((err) => {
-      ElMessage.error(err.message)
+      ElMessage.error(err)
     })
+}, 2000)
+
+const loginRequest = () => {
+  throttle_login()
+}
+
+const throttle_getCapcha = throttle(() => {
+  userGetCapcha(registerForm.email)
+    .then(() => {
+      ElMessage.success('获取验证码成功')
+    }).catch((err) => {
+      ElMessage.error(err)
+    })
+}, 2000)
+const getCaptcha = () => { // 获取验证码
+  throttle_getCapcha()
+}
+
+const throttle_register = throttle(() => {
+  userRegister(registerForm.email, registerForm.password, registerForm.captcha)
+    .then((result) => {
+      const { data } = result
+      if(data.code !== 200) return ElMessage.error(data.data.msg)
+      userInfoStore.userLogin(registerForm.email, registerForm.password)
+        .then(() => {
+          ElMessage.success('注册成功')
+          router.push('/index')
+        }).catch((err) => {
+          ElMessage.error(err)
+        })
+    }).catch((err) => {
+      ElMessage.error(err)
+    })
+}, 2000)
+const registerRequest = () => { // 注册
+  throttle_register()
 }
 </script>
   
@@ -64,7 +127,7 @@ const loginRequest = () => {
     .overall-header-left {
         align-self: center;
         justify-self: center;
-        color: var(--oe-perf-font-color);
+        color: var(--hy-boke-font-color);
       }
       .logo-title {
         width: 100%;
@@ -72,7 +135,7 @@ const loginRequest = () => {
         text-align: center;
         font-size: 50px;
         font-weight: 900;
-        color: var(--oe-perf-font-color);
+        color: var(--hy-boke-font-color);
       }
     .left-content {
       width: 50%;
@@ -99,7 +162,7 @@ const loginRequest = () => {
       :deep(.el-tabs__nav-wrap:after) {
         display: none;
       }
-      .username-login-form {
+      .user-login-form {
         margin-top:20px;
       }
       .login-btn {

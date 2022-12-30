@@ -1,7 +1,6 @@
 
 export interface UserInfo {
-    loginId:string,
+    id:number,
     token:string,
-    username:string,
-    role:string
+    username:string
 }

@@ -106,9 +106,9 @@ function upload() {
     box-sizing: border-box;
     position: relative;
     display: block;
-    margin: var(--oe-perf-font-size-caption);
-    padding: var(--oe-perf-font-size-caption);
-    width: calc(100px + var(--oe-perf-font-size-caption) * 2);
+    margin: var(--hy-boke-font-size-caption);
+    padding: var(--hy-boke-font-size-caption);
+    width: calc(100px + var(--hy-boke-font-size-caption) * 2);
     overflow: hidden;
     .file_icon_close {
         position: absolute;

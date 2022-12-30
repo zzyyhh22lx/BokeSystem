@@ -155,7 +155,7 @@ const options = [
 
 <style scoped lang="scss">
 .input-with-select ::v-deep .el-input-group__prepend {
-  background-color: var(--oe-perf-bg-section)!important;
+  background-color: var(--hy-boke-bg-section)!important;
 }
 .promit-font-style {
   display: flex;
@@ -175,7 +175,7 @@ a {
   cursor: pointer;
 }
 a:active {
-  color: var(--oe-perf-color-secondary);
+  color: var(--hy-boke-color-secondary);
 }
 .el-drawer-header {
   display: block;

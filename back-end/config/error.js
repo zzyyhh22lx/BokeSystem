@@ -1,0 +1,22 @@
+// 错误返回信息
+const EMAIL_OR_PASSWORD_IS_REQUIRED = '邮箱或者密码不为空'; //500
+const EMAIL_IS_ALREADY_EXIST = '邮箱已存在'; // 501
+
+const EMAIL_IS_NOT_EXIST = '邮箱不存在'; // 502
+const PASSWORD_IS_NOT_RIGHT = '密码错误'; // 503
+
+const EMAIL_IS_REQUIRED = '邮箱不能为空'; // 504
+
+const CAPTCHA_IS_NOT_RIGHT = '验证码出错'; // 505
+
+const NAME_IS_ALREADY_EXISTS = '用户名已存在'; // 506
+
+module.exports = {
+    EMAIL_IS_ALREADY_EXIST,
+    EMAIL_OR_PASSWORD_IS_REQUIRED,
+    NAME_IS_ALREADY_EXISTS,
+    EMAIL_IS_NOT_EXIST,
+    EMAIL_IS_REQUIRED,
+    PASSWORD_IS_NOT_RIGHT,
+    CAPTCHA_IS_NOT_RIGHT
+}

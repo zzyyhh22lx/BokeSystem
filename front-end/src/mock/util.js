@@ -18,6 +18,7 @@ export const createResponseBody = (data, message, code = 0, headers = {}) => {
   if (headers !== null && typeof headers === 'object' && Object.keys(headers).length > 0) {
     responseBody._headers = headers;
   }
+  console.log(responseBody)
   return responseBody;
 };
 

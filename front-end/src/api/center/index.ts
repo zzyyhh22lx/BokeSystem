@@ -2,11 +2,19 @@ import createAxios from '@/utils/request/axios';
 import { UploadUserFile } from 'element-plus'
 
 const api = {
+  getUsers: '/usercenter/getusers',
   getApplicationList: '/usercenter/application/getapplicationlist',
   removeApplication: '/usercenter/application/removeApplication',
   testScenario: '/usercenter/new/getscenario',
   newApplication: '/usercenter/new',
   approvalAction: '/usercenter/approval/approvalAction'
+}
+
+export async function getUsers() {
+  return createAxios({
+    url: api.getUsers,
+    method: 'get'
+  })
 }
 
 export function getApplicationList() {
