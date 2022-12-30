@@ -6,7 +6,7 @@
 ### 下载：
 
 ```shell
-git clone xxxxx
+git clone git@github.com:zzyyhh22lx/Vue3Boke.git
 ```
 
 
@@ -24,8 +24,8 @@ git clone xxxxx
 
 
 
-![image-20221230200400150](C:\Users\lin\AppData\Roaming\Typora\typora-user-images\image-20221230200400150.png)
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ddb635119927466a864c3849d4097898~tplv-k3u1fbpfcp-watermark.image?)
 
-![image-20221230200554580](C:\Users\lin\AppData\Roaming\Typora\typora-user-images\image-20221230200554580.png)
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/27c0f0834e11464d8c85589af3c6fb57~tplv-k3u1fbpfcp-watermark.image?)
 
-![image-20221230200617541](C:\Users\lin\AppData\Roaming\Typora\typora-user-images\image-20221230200617541.png)
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0b30da6d861249a18223d1c6c52c38e4~tplv-k3u1fbpfcp-watermark.image?)
