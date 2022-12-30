@@ -12,7 +12,7 @@ const verifyRegister = async (ctx, next) => { // 验证注册
 }
 
 const verifyUser = async (ctx, next) => { // 验证登录
-    const {email, password} = ctx.request.body
+    const { email, password } = ctx.request.body
     const users = await userService.findByEmail(email)
     const user = users[0]
     if(!user) return (ctx.response.body = getResult('502'))

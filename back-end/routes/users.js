@@ -12,14 +12,14 @@ router.get('/', function (ctx, next) {
   ctx.body = 'this is a users response!'
 })
 
+router.get('/visit', loginController.vistorLogin)
+
 router.post('/login', verifyUser, loginController.sign)
 
 router.post('/logout', async (ctx, next) => { // 登出
   ctx.response.body = {
     code: 200,
-    message : "登出成功",
-    _headers: {"Custom-Header": 'Ace5f3B4-cb62-1C38-6F87-B6fdA25fEDeE'},
-    _status: 200
+    message : "登出成功"
   }
 })
 

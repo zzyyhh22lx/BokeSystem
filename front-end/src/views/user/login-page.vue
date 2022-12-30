@@ -42,6 +42,7 @@
               </el-form-item>
             </el-form>
           </el-tab-pane>
+          <a class="vistor-login clearfix" @click="vistorLoginRequest">游客登录</a>
         </el-tabs>
       </div>
     </div> 
@@ -54,7 +55,7 @@ import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus'
 import { useUserInfo } from '@/stores/userInfo'
 import { throttle } from '@/utils/tools/index'
-import { userRegister, userGetCapcha } from '@/api/user/index'
+import { userGetCapcha } from '@/api/user/index'
 
 const userInfoStore = useUserInfo()
 const router = useRouter()
@@ -66,11 +67,19 @@ const loginForm = reactive({
   password: ''
 })
 
-const registerForm = reactive({
-  email: '',
-  password: '',
-  captcha: ''
-})
+const throttle_visitorLogin = throttle(() => {
+  userInfoStore.userVistorLogin()
+    .then(() => {
+      ElMessage.success('登陆成功')
+      router.push('/index')
+    }).catch((err) => {
+      ElMessage.error(err)
+    })
+}, 2000)
+const vistorLoginRequest = () => {
+  throttle_visitorLogin()
+}
+
 
 const throttle_login = throttle(() => {
   userInfoStore.userLogin(loginForm.email, loginForm.password)
@@ -86,9 +95,17 @@ const loginRequest = () => {
   throttle_login()
 }
 
+
+const registerForm = reactive({
+  email: '',
+  password: '',
+  captcha: ''
+})
+
 const throttle_getCapcha = throttle(() => {
   userGetCapcha(registerForm.email)
-    .then(() => {
+    .then((res) => {
+      if(res.data.code !== 200) return ElMessage.error(res.data.data.msg)
       ElMessage.success('获取验证码成功')
     }).catch((err) => {
       ElMessage.error(err)
@@ -99,17 +116,10 @@ const getCaptcha = () => { // 获取验证码
 }
 
 const throttle_register = throttle(() => {
-  userRegister(registerForm.email, registerForm.password, registerForm.captcha)
-    .then((result) => {
-      const { data } = result
-      if(data.code !== 200) return ElMessage.error(data.data.msg)
-      userInfoStore.userLogin(registerForm.email, registerForm.password)
-        .then(() => {
-          ElMessage.success('注册成功')
-          router.push('/index')
-        }).catch((err) => {
-          ElMessage.error(err)
-        })
+  userInfoStore.userRegister(registerForm.email, registerForm.password, registerForm.captcha)
+    .then(() => {
+      ElMessage.success('登陆成功')
+      router.push('/index')
     }).catch((err) => {
       ElMessage.error(err)
     })
@@ -168,6 +178,9 @@ const registerRequest = () => { // 注册
       .login-btn {
         margin-top: 30px;
         width: 100%;
+      }
+      .vistor-login {
+        float: right;
       }
     }
   }

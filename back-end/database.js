@@ -21,7 +21,7 @@ connectionPool.getConnection((err, connection) => {
             connection.execute(
             `create table if not exists users(
                 id INT PRIMARY KEY AUTO_INCREMENT,
-                email VARCHAR(50) NOT NULL,
+                email VARCHAR(50),
                 password VARCHAR(50) NOT NULL,
                 username VARCHAR(50) NOT NULL UNIQUE,
                 permission INT NOT NULL,
@@ -29,6 +29,10 @@ connectionPool.getConnection((err, connection) => {
                 createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )`, []);
+            connection.execute(
+                `insert into users (email, password, username, permission) values (?, ?, ?, ?);`,
+                ['', 'youkemoshi', '游客模式', 0]
+            )
             console.log(`数据库连接成功，可以操作数据库~`)
         }
     })

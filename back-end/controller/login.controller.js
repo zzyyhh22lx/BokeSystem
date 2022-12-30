@@ -10,6 +10,14 @@ class LoginController {
         })
         ctx.body = { code: 200, data: { id, username, token, msg: '登录成功~' } }
     }
+    vistorLogin(ctx, next) {
+        const { id, username, permission } = { id: 1, username: '游客模式', permission: 0 }
+        const token = jwt.sign({id, username, permission}, private_key, {
+            expiresIn: 24 * 60 * 60 * 3, // 过期时间3天
+            algorithm: 'RS256'
+        })
+        ctx.body = { code: 200, data: { id, username, token, msg: '登录成功~' } }
+    }
 }
 
 module.exports = new LoginController();

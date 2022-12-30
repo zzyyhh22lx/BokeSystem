@@ -4,7 +4,15 @@ const api = {
   userLogin: '/users/login',
   userLogout: '/users/logout',
   userRegister: '/users/register',
-  userGetCapcha: '/users/getcaptcha'
+  userGetCapcha: '/users/getcaptcha',
+  userVisit: '/users/visit'
+}
+
+export function userVisit() {
+  return createAxios({
+    url: api.userVisit,
+    method: 'get'
+  })
 }
 
 export function userlogin(email: string, password: string) {
@@ -25,7 +33,7 @@ export function userlogout() {
   })
 }
 
-export function userRegister(email: string, password: string, captcha:string) {
+export function userregister(email: string, password: string, captcha:string) {
   return createAxios({
     url: api.userRegister,
     method: 'post',

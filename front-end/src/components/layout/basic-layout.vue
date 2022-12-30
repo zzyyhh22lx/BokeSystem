@@ -10,7 +10,8 @@
         </div> -->
       </div>
       <div class="header-right">
-        {{ getCookie('user_name') }}
+        <!-- 解码 -->
+        {{ decodeURIComponent(getCookie('user_name')) }}
         <el-popconfirm title="登出系统？" @confirm="userLogout">
           <template #reference>
             <el-icon class="logout-btn"><SwitchButton /></el-icon>
@@ -33,7 +34,7 @@
             <template #title>
               <span>成员</span>
             </template>
-            <el-menu-item index="2-1">item</el-menu-item>
+            <el-menu-item index="2-1">{{ item }}</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="3">
             <template #title>
@@ -90,9 +91,11 @@ const users = reactive([] as any[]); // 断言类型处理
 onMounted(async () => {
   try {
     const result = await getUsers()
+    console.log(result)
     const { data } = result.data
-    data.forEach((user:string) => {
-      users.push(user)
+    data.result.forEach((user:string) => {
+      if(getCookie('user_name') !== user) // 排除自己
+        users.push(user)
     })
   } catch (e) {
     console.error(e)

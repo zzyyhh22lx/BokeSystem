@@ -69,6 +69,14 @@ interface dataType {
 { code: 200, data: { id, username, token, msg: '登录成功~' } }
 ```
 
+- `get('/users/visit')` ( 游客模式 )
+
+```typescript
+{ code: 200, data: { id, username, token, msg: '登录成功~' } }
+```
+
+
+
 ##### 注册
 
 - `get('users/getcaptcha')` （向用户发送验证码）
