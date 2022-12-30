@@ -52,13 +52,33 @@
     @cancel="dialogVisible = false"
     @handleClose="dialogVisible = false"
     @upload="upload"
-    ></re-po-uploader>
+    >
+            <el-upload
+              v-model:file-list="fileList"
+              class="upload-demo"
+              multiple
+              accept=".md"
+              :limit="1"
+              :http-request="handleUpload"
+            >
+              <div class="upload-btn">
+                <el-icon size="16"><Upload /></el-icon>
+                <span class="upload-txt">上传文件</span>
+              </div>
+              <template #tip>
+              <span class="btn-a-margin"><a @click.stop="download">下载模板</a></span>
+                <div class="el-upload__tip">
+                  支持扩展名：.md...
+                </div>
+              </template>
+            </el-upload>
+    </re-po-uploader>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, UploadUserFile } from 'element-plus'
 import { TitleMes } from './interface'
 import { cropText } from '@/utils/tools/index'
 import RePoUploader from '@/components/uploader/RePoUploader.vue'
@@ -90,8 +110,40 @@ function deleteFile(id:number):void {
   }
 }
 
-function upload() {
+const fileList = ref<UploadUserFile[]>([])
+const fileNameBool = ref(false)
+const data = ref<any>('') // 存放解析的数据
 
+const upload = () => {
+  if(fileNameBool.value) {
+
+  } else ElMessage.error('请上传 .md 的文件')
+}
+
+// 解析上传的md文件
+const handleUpload = (uploadFiles: any) => {
+  const fileReader = new FileReader()
+  fileReader.readAsText(uploadFiles.file)
+  if(uploadFiles.file.name.split('.').pop() === 'md') {
+    fileNameBool.value = true
+    fileReader.onload = function() {
+      data.value = this.result
+    }
+  }
+}
+function download() {
+  // str可以从后端获取数据
+  let str = '# 这是一个md文件'
+  // encodeURIComponent解决中文乱码
+  let url = `data:text/csv;charset=utf-8,\ufeff${encodeURIComponent(str)}`
+  // 通过创建a标签实现
+  let link = document.createElement('a')
+  link.href = url
+  // 对下载的文件命名
+  link.download = 'template.md'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 </script>
 
@@ -147,4 +199,27 @@ function upload() {
 // .file_one:last-child {
 //     margin-right: auto;
 // }
+
+a {
+  color: #002FA7;
+  cursor: pointer;
+}
+a:active {
+  color: var(--hy-boke-color-secondary);
+}
+.btn-a-margin {
+  margin-left: 16px;
+}
+.upload-btn {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  line-height: 22px;
+  border-radius: 4px 4px 4px 4px;
+  border: 1px solid rgba(0,0,0,0.15);
+  font-size: 16px;
+}
+.upload-txt {
+  font-size: 14px !important;
+}
 </style>

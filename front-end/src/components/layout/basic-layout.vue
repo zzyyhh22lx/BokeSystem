@@ -94,7 +94,7 @@ onMounted(async () => {
     console.log(result)
     const { data } = result.data
     data.result.forEach((user:string) => {
-      if(getCookie('user_name') !== user) // 排除自己
+      if(decodeURIComponent(getCookie('user_name')) !== user && user !== '游客模式') // 排除自己
         users.push(user)
     })
   } catch (e) {

@@ -26,4 +26,7 @@ a,button{cursor:pointer;}
 .clearfix{
     *zoom:1;/*IE/7/6*/
 }
+.pointer {
+  cursor: pointer;
+}
 </style>

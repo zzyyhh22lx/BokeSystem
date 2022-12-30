@@ -1,6 +1,9 @@
 <template>
     <el-card shadow="always">
-        <h1>我的专栏：</h1>
+        <div class="title">
+          <h1>我的专栏：</h1>
+          <a @click="dialogVisible = true">解析文件夹</a>
+        </div>
         <div class="file_layout">
             <div class="file_one" v-for="item in file_list.list" :key="item.txt" @dblclick="pushView(item)">
                 <div><img src="@/assets/svg/file.svg" alt="文件夹"></div>
@@ -52,6 +55,17 @@
                 </div>
             </div>
         </div>
+        <re-po-uploader
+        title="新建申请"
+        description="上传描述："
+        btnText="新建"
+        :bool="dialogVisible"
+        @cancel="dialogVisible = false"
+        @handleClose="dialogVisible = false"
+        @upload="upload"
+        >
+          <input type="file" @change="selectFolder($event)" webkitdirectory />
+        </re-po-uploader>
     </el-card>
 </template>
 
@@ -61,11 +75,17 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Mes } from './interface'
 import { cropText, validateFileName } from '@/utils/tools/index'
+import RePoUploader from '@/components/uploader/RePoUploader.vue'
 
 const router = useRouter()
 const { ctx } = getCurrentInstance() as any// 获取 refs 实例对象 (只能在setup或者mounted中使用)
 
 const input_bool = ref<boolean>(true)
+const dialogVisible = ref<boolean>(false)
+
+function upload() { // 文件上传
+
+}
 
 const list = ref<Mes[]>([])
 const file_list = reactive({
@@ -74,6 +94,24 @@ const file_list = reactive({
 const file_occupate_list = [1,2,3,4,5,6,7] // 占位文件夹数量
 
 const hashMap = new Map()
+
+// 解析文件夹
+function selectFolder(e:any) {
+  // 文件夹里面所有文件
+  let {files} = e.target;
+  // 文件夹名称
+  let relativePath = files[0].webkitRelativePath;      
+  let folderName = relativePath.split('/')[0];
+  // 文件信息转换成FormData结构遍历上传
+  for (let i = 0; i < files.length; i++) {
+    let formData = new FormData();      
+    formData.append('file', files[i])
+    for (let [a, b] of formData.entries()) {
+      console.log(a, b, '--------------');
+    }
+  }
+  folderName
+}
 
 // 按enter
 function keyup_enter(e:any) {
@@ -147,6 +185,13 @@ function pushView(query: any):void {
 </script>
 
 <style scoped lang="scss">
+.title {
+  display: flex;
+  justify-content: flex-end; // 靠右显示
+  h1 {
+    flex: 1; // 自动填充宽度，实现元素一个左一个右
+  }
+}
 .file_layout {
     display: flex;
     flex-direction: flex-start;

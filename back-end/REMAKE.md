@@ -40,17 +40,61 @@ node bin/www
 | ---- | ----------- | ----------- | ---------------------- | ------------------- | ----------- | -------------------- | -------------------- |
 | int  | varchar(50) | varchar(50) | varchar(50)            | int                 | varchar(50) | timestamp            | timestamp            |
 
+```sql
+create table if not exists users(
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                email VARCHAR(50),
+                password VARCHAR(50) NOT NULL,
+                username VARCHAR(50) NOT NULL UNIQUE,
+                permission INT NOT NULL,
+                createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+               	img_Url VARCHAR(50),
+                updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
+
+
+
 用户专栏表：(Columns)
 
-| id(refence id) | column_id(专栏id) | column_name(专栏名字) | createAt（创建时间） | updateAt（更新时间） |
-| -------------- | ----------------- | --------------------- | -------------------- | -------------------- |
-| int            | int               | varchar(50)           | timestamp            | timestamp            |
+| c_id(refence id) (外键约束) | id(专栏id) | column_name(专栏名字) | createAt（创建时间） | updateAt（更新时间） |
+| --------------------------- | ---------- | --------------------- | -------------------- | -------------------- |
+| int                         | int        | varchar(50)           | timestamp            | timestamp            |
+
+```sql
+create table if not exists columns(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    c_id INT,
+    column_name VARCHAR(50) NOT NULL UNIQUE,
+    createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	FOREIGN KEY(c_id) REFERENCES users(id)
+);
+```
+
+
+
+
 
 用户内容表：(Articles)
 
-| id(refence id) | column_id(refence column_id) | title       | content        | createAt（创建时间） | updateAt（更新时间） |
-| -------------- | ---------------------------- | ----------- | -------------- | -------------------- | -------------------- |
-| int            | int                          | varchar(50) | varchar(65535) | timestamp            | timestamp            |
+| id(文字id) | a_id(refence c_id) | title       | content        | createAt（创建时间） | updateAt（更新时间） |
+| ---------- | ------------------ | ----------- | -------------- | -------------------- | -------------------- |
+| int        | int                | varchar(50) | varchar(65535) | timestamp            | timestamp            |
+
+```sql
+create table if not exists articles(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    a_id INT,
+    title VARCHAR(50) NOT NULL UNIQUE,
+    content VARCHAR(65535),
+    createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	FOREIGN KEY(a_id) REFERENCES columns(c_id)
+);
+```
+
+
 
 
 
