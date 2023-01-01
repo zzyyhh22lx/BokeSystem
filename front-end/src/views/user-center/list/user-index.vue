@@ -70,15 +70,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, getCurrentInstance, nextTick } from 'vue'
+import { ref, reactive, getCurrentInstance, nextTick, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Mes } from './interface'
+import { newColumn, getallcolumn, deletecolumn } from '@/api/center'
 import { cropText, validateFileName } from '@/utils/tools/index'
 import RePoUploader from '@/components/uploader/RePoUploader.vue'
 
 const router = useRouter()
-const { ctx } = getCurrentInstance() as any// 获取 refs 实例对象 (只能在setup或者mounted中使用)
+const { ctx } = getCurrentInstance() as any // 获取 refs 实例对象 (只能在setup或者mounted中使用)
 
 const input_bool = ref<boolean>(true)
 const dialogVisible = ref<boolean>(false)
@@ -119,7 +120,7 @@ function keyup_enter(e:any) {
 }
 
 // 验证文件名是否已存在或者合法
-function verify(e:any):any {
+async function verify(e:any):Promise<any> {
   const id = parseInt(e.target.getAttribute('id'))
   let { value } = e.target, nameId = id
   input_bool.value = false
@@ -133,11 +134,20 @@ function verify(e:any):any {
     }
   }
 
-  //   操作
-  file_list.list[id].txt = value // getAttribute('id')获取list的input在数组的位置
-  hashMap.set(value, value)
-  input_bool.value = true
-  return
+  //   文件名合法进行的操作
+  try {
+    const result = (await newColumn(value)).data
+    if(result.code !== 200) return ElMessage.error(result.data.msg)
+    file_list.list[id].txt = value // getAttribute('id')获取list的input在数组的位置
+    hashMap.set(value, value)
+    input_bool.value = true
+    return ElMessage({
+      message: result.data.msg,
+      type: 'success'
+    })
+  } catch (e) {
+    return ElMessage.error('服务端发生致命的错误~')
+  }
 
   function reuse(e:any, message:string):void {
     e.target.focus()
@@ -160,17 +170,23 @@ function addFile():void {
 }
 
 // 删除文件夹
-function deleteFile(id:number):void {
-  hashMap.delete(file_list.list[id].txt)
-  file_list.list.splice(id, 1)
+async function deleteFile(id:number) {
+  try {
+    const result = (await deletecolumn(file_list.list[id].txt)).data
+    if(result.code !== 200) return ElMessage.error(result.data.msg)
+    hashMap.delete(file_list.list[id].txt)
+    file_list.list.splice(id, 1)
 
-  ElMessage({
-    message: '删除成功',
-    type: 'success',
-  })
+    ElMessage({
+      message: '删除成功',
+      type: 'success',
+    })
 
-  for(let i = id; i <= file_list.list.length; i++) {
-    file_list.list[i].id--
+    for(let i = id; i <= file_list.list.length; i++) {
+      file_list.list[i].id--
+    }
+  } catch (e) {
+    return ElMessage.error('服务端发生致命的错误~')
   }
 }
 
@@ -182,6 +198,24 @@ function pushView(query: any):void {
     query
   })
 }
+
+onMounted(async () => {
+  try {
+    const result = (await getallcolumn()).data
+    if(result.code !== 200) return ElMessage.error(result.data.msg)
+    result.data.result.forEach((item:any) => {
+      let list:Mes = {
+        txt: item.column_name,
+        rename: item.column_name,
+        id: item.id
+      }
+      file_list.list.push(list)
+      hashMap.set(item.column_name, item.column_name)
+    })
+  } catch (e) {
+    return ElMessage.error('服务端发生致命的错误~')
+  }
+})
 </script>
 
 <style scoped lang="scss">

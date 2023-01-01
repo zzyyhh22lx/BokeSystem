@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordName } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordName } from 'vue-router'
 import cookie from 'js-cookie'
 import { staticRoutes, asyncRoutes } from './static'
 
@@ -7,7 +7,7 @@ const loginRoute = '/user/login'
 const indexRoute = '/index'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [...staticRoutes, ...asyncRoutes],
 })
 // todo，加载路由后，根据用户role进行过滤

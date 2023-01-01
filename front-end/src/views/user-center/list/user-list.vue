@@ -15,48 +15,36 @@
             <el-select
               v-if="JSON.stringify(tableData.data) !== '{}'"
               v-model="select"
-              placeholder="申请单号"
+              placeholder="专栏id"
               style="width: 115px" size="large"
               @change="changeSelect"  
             >
               <el-option
                 v-for="item in tableData.data"
-                :key="item.requestCode"
-                :label="item.requestCode"
-                :value="item.requestCode"
+                :key="item.a_id"
+                :label="item.a_id"
+                :value="item.a_id"
               />
             </el-select>
           </template>
         </el-input>
       </el-col>
-      <span class="right-btn" v-if="route.meta.title === 'applicationList'">
-        <el-button type="primary" size="large" @click="dialogVisible = true">新建申请</el-button>
-      </span>
     </el-row>
-    <re-po-uploader
-    title="新建申请"
-    description="上传描述："
-    btnText="新建"
-    :options="options"
-    :bool="dialogVisible"
-    @cancel="dialogVisible = false"
-    @handleClose="dialogVisible = false"
-    @upload="upload"
-    ></re-po-uploader>
     <application-table
       :tableData="propsData.data"
       @pushView="intoView"
+      @deleteApp="deleteApp"
     ></application-table>
   </el-card>
 </template>
 
 <script setup lang="ts">
 import { ref,reactive,onMounted } from 'vue'
-import { getApplicationList } from '@/api/center'
+import { getallapprovals, getmyapprovals, deleteapproval } from '@/api/center'
 import { Search } from '@element-plus/icons-vue'
 import { useRouter, useRoute } from 'vue-router'
 import  ApplicationTable  from '../components/application-table.vue'
-import RePoUploader from '@/components/uploader/RePoUploader.vue'
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
@@ -65,7 +53,6 @@ const hashData = new Map()
 
 const select = ref('')
 const value = ref('')
-const dialogVisible = ref(false)
 
 const data:any = []
 const tableData = reactive({
@@ -99,58 +86,56 @@ function intoView(query:any) {
     path,
     query
   })
-
 }
 
-function upload() {
-
+async function deleteApp(query:any) {
+  try {
+    const value = (await deleteapproval(query.a_id, query.title)).data
+    if(value.code !== 200) return ElMessage.error(value.data.msg)
+    ElMessage({
+      message: value.data.msg,
+      type: 'success',
+    })
+    window.location.reload()
+  } catch (e) {
+    return ElMessage.error('服务端出现致命的错误~')
+  }
 }
 
 onMounted(() => {
-  getApplicationList()
-    .then((data) => {
-      tableData.data = data.data.data
-      propsData.data = data.data.data
-      tableData.data.forEach((item:any, index:any) => {
-        hashData.set(item.requestCode, index)
+  if(route.meta.title === 'approveList')
+    getallapprovals()
+      .then((data) => {
+        const d = data.data
+        if(d.code !== 200) {
+          return ElMessage({
+            message: d.data.msg,
+            type: 'warning',
+          })
+        }
+        tableData.data = d.data.data
+        propsData.data = d.data.data
+        tableData.data.forEach((item:any, index:any) => {
+          hashData.set(item.a_id, index)
+        })
       })
-    })
+  else
+    getmyapprovals()
+      .then((data) => {
+        const d = data.data
+        if(d.code !== 200) {
+          return ElMessage({
+            message: d.data.msg,
+            type: 'warning',
+          })
+        }
+        tableData.data = d.data.data
+        propsData.data = d.data.data
+        tableData.data.forEach((item:any, index:any) => {
+          hashData.set(item.a_id, index)
+        })
+      })
 })
-
-const options = [
-  {
-    value: '解决方案',
-    label: '解决方案',
-    children: [
-      {
-        value: '解决方案',
-        label: '解决方案'
-      }
-    ],
-  },
-  {
-    value: '基础性能',
-    label: '基础性能',
-    children: [
-      {
-        value: 'CPU',
-        label: 'CPU'
-      },
-      {
-        value: '内存',
-        label: '内存'
-      },
-      {
-        value: '储存',
-        label: '储存'
-      },
-      {
-        value: '网络',
-        label: '网路'
-      }
-    ],
-  },
-]
 </script>
 
 <style scoped lang="scss">

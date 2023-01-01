@@ -78,6 +78,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import { useRoute } from 'vue-router'
+import { publish } from '@/api/center'
 import { ElMessage, UploadUserFile } from 'element-plus'
 import { TitleMes } from './interface'
 import { cropText } from '@/utils/tools/index'
@@ -114,9 +115,19 @@ const fileList = ref<UploadUserFile[]>([])
 const fileNameBool = ref(false)
 const data = ref<any>('') // 存放解析的数据
 
-const upload = () => {
+const upload = async (title:string) => {
   if(fileNameBool.value) {
-
+    try {
+      const result = (await publish(parseInt(route.query.id), title, data.value)).data
+      if(result.code !== 200) return ElMessage.error(result.data.msg)
+      ElMessage({
+        message: result.data.msg,
+        type: 'success'
+      })
+      window.location.reload()
+    } catch (e) {
+      return ElMessage.error('服务端发生致命的错误~')
+    }
   } else ElMessage.error('请上传 .md 的文件')
 }
 

@@ -1,13 +1,15 @@
 import createAxios from '@/utils/request/axios';
-import { UploadUserFile } from 'element-plus'
 
 const api = {
   getUsers: '/usercenter/getusers',
-  getApplicationList: '/usercenter/application/getapplicationlist',
-  removeApplication: '/usercenter/application/removeApplication',
-  testScenario: '/usercenter/new/getscenario',
-  newApplication: '/usercenter/new',
-  approvalAction: '/usercenter/approval/approvalAction'
+  getallapprovals: '/usercenter/getallapprovals',
+  getmyapprovals: '/usercenter/getmyapprovals',
+  getallcolumn: '/usercenter/getallcolumn',
+  approve: '/usercenter/approve',
+  deleteapproval: '/usercenter/deleteapproval',
+  newColumn: '/usercenter/newcolumn',
+  deletecolumn: '/usercenter/deletecolumn',
+  publish: '/usercenter/publish'
 }
 
 export async function getUsers() {
@@ -17,50 +19,73 @@ export async function getUsers() {
   })
 }
 
-export function getApplicationList() {
+export function getallapprovals() {
   return createAxios({
-    url: api.getApplicationList,
+    url: api.getallapprovals,
     method: 'get'
   })
 }
 
-export function removeApplication(requestCode: string) {
+export function getmyapprovals() {
   return createAxios({
-    url: api.removeApplication,
-    method: 'get',
-    data: {
-      requestCode
-    }
+    url: api.getmyapprovals,
+    method: 'get'
   })
 }
 
-export function getScenario() {
+export async function approve(a_id: number, title: string, opinion: string) {
   return createAxios({
-    url: api.testScenario,
-    method: 'get',
-  })
-}
-
-export function newApplication(testScenario: string, fileList: UploadUserFile[], describe:string) {
-  return createAxios({
-    url: api.newApplication,
+    url: api.approve,
     method: 'post',
     data: {
-      testScenario,
-      fileList,
-      describe
+      a_id, title, opinion
     }
   })
 }
 
-export function approvalAction(requestCode: string, outcome:string, opinion:string) {
+export async function deleteapproval(a_id: number, title: string) {
   return createAxios({
-    url: api.approvalAction,
-    method: 'get',
+    url: api.deleteapproval,
+    method: 'delete',
     data: {
-      requestCode,
-      outcome,
-      opinion
+      a_id, title
+    }
+  })
+}
+
+export async function newColumn(column_name:string) {
+  return createAxios({
+    url: api.newColumn,
+    method: 'post',
+    data: {
+      column_name
+    }
+  })
+}
+
+export async function getallcolumn() {
+  return createAxios({
+    url: api.getallcolumn,
+    method: 'get'
+  })
+}
+
+export async function deletecolumn(column_name:string) {
+  return createAxios({
+    url: api.deletecolumn,
+    method: 'delete',
+    data: {
+      column_name
+    }
+  })
+}
+
+export async function publish(a_id:number, title:string, content:string) {
+  return createAxios({
+    url: api.publish,
+    method: 'post',
+    data: {
+      a_id, title, content
     }
   })
 }

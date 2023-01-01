@@ -18,12 +18,11 @@
           <el-form-item label="上传文件：">
             <slot></slot>
           </el-form-item>
-          <el-form-item :label="description">
+          <el-form-item :label="t">
             <el-input
-            v-model="form.description"
-            type="textarea"
+            v-model="form.title"
             maxlength="100"
-            placeholder="（可选）请输入描述，不超过100个字符"
+            placeholder="请输入文章标题"
             />
           </el-form-item>
         </el-form>
@@ -31,7 +30,7 @@
       <template #footer>   
         <span class="dialog-footer">
           <el-button @click="cancel()">取消</el-button>
-          <el-button type="primary" @click="upload(data)">
+          <el-button type="primary" @click="upload">
             {{ btnText }}
           </el-button>
         </span>
@@ -44,7 +43,7 @@ import { ElMessage } from 'element-plus'
 
 const emit = defineEmits<{
   (e:'cancel'):void,
-  (e:'upload'):void,
+  (e:'upload', title:any):void,
   (e:'handleClose'):void
 }>()
 const props = withDefaults(defineProps<{
@@ -52,7 +51,7 @@ const props = withDefaults(defineProps<{
   region: any,
   options: Array<any>,
   title: string,
-  description: string,
+  t: string,
   btnText: string,
   disabled: boolean // 选择器是否可选
 }>(),
@@ -69,15 +68,16 @@ const props = withDefaults(defineProps<{
     }
   ],
   title: '新建申请',
-  description: '申请描述：',
+  t: '申请描述：',
   btnText: '新建',
   disabled: false
 })
-const { bool, title, description, options, region, btnText, disabled } = toRefs(props)
+const { bool, title, t, options, region, btnText, disabled } = toRefs(props)
 const centerDialogVisible = ref(false)
 
 const form = reactive({
-  region: ''
+  region: '',
+  title: ''
 })
 watchEffect(()=>{
   centerDialogVisible.value = bool.value
@@ -92,7 +92,8 @@ const handleClose = () => {
   emit('handleClose')
 }
 const upload = () => {
-  emit('upload')
+  if(!form.title) return ElMessage.error('请输入必要信息')
+  emit('upload', form.title)
 }
 </script>
 <style scoped lang="scss">

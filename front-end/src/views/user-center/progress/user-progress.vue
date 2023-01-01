@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="always">
     <h4>审批操作</h4>
-    <p>申请单号：{{ data.data.requestCode }}</p>
+    <p>申请单号：{{ data.data.a_id }}</p>
     <div class="time-line">
       <div
       class="item item-first"
@@ -16,9 +16,9 @@
               提交申请
             </span>
           </el-col>
-          <el-col :span="3"><span class="item-message">{{ data.data.submitter }}</span></el-col>
-          <el-col :span="6"><span class="item-message">{{ data.data.date }}</span></el-col>
-          <el-col :span="12"><span class="item-message">申请描述：{{ data.data.describe }}</span></el-col>
+          <el-col :span="3"><span class="item-message">{{ data.data.username }}</span></el-col>
+          <el-col :span="6"><span class="item-message">{{ data.data.createAt }}</span></el-col>
+          <el-col :span="12"><span class="item-message">文章标题：{{ data.data.title }}</span></el-col>
         </el-row>
       </div>
       <div
@@ -35,13 +35,13 @@
             </span>
           </el-col>
           <el-col :span="3">
-            <span class="item-message">{{ data.data.approver }}</span>
+            <span class="item-message">lhy</span>
           </el-col>
           <el-col :span="6">
-            <span class="item-message item-index-message">{{ data.data.progress }}</span>
+            <span class="item-message item-index-message">{{ data.data.status }}</span>
           </el-col>
           <el-col :span="12">
-            <span class="item-message">审批意见：{{ approvalMes }}</span>
+            <span class="item-message">审批意见：{{ data.data.status }}</span>
           </el-col>
         </el-row>
         <div v-if="indexNum === 2 && judgePath">
@@ -49,15 +49,12 @@
             <el-icon size="16"><Document /></el-icon>
             <span class="item-txt">我的审核意见</span>
           </div>
-            <el-form :model="form" :rules="rules" label-width="120px">
+            <el-form :model="form" label-width="120px">
               <el-form-item label="审核结果：">
-                <el-radio-group v-model="form.agree">
-                  <el-radio label="同意" />
-                  <el-radio label="不同意" />
+                <el-radio-group v-model="form.opinion">
+                  <el-radio label="yes" />
+                  <el-radio label="no" />
                 </el-radio-group>
-              </el-form-item>
-              <el-form-item prop="opinion" label="审核意见：">
-                <el-input v-model="form.opinion" type="textarea" />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="onSubmit">确定</el-button>
@@ -87,26 +84,43 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
-import type { FormRules } from 'element-plus'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { approve } from '@/api/center'
+import { ElMessage } from 'element-plus'
 
 const indexNum = ref(1)
 
 const route = useRoute()
+const router = useRouter()
+
 const judgePath = ref(false)
-const approvalMes = ref('暂无')
 const form = reactive({
-  agree: '',
   opinion: ''
 })
-const rules = reactive<FormRules>({
-  opinion: [{ required: true, message: '请输入审核意见', trigger: 'blur' }]
-})
 const data = reactive({
-  data:{}
+  data:{
+    a_id:1, // 属于哪个专栏
+    username: '',
+    title: '', // a_id确定则仅有唯一值
+    content: '',
+    status: '',
+    createAt:''
+  }
 })
-const onSubmit = () => {
-  console.log('submit!')
+const onSubmit = async () => {
+  try {
+    const value = (await approve(data.data.a_id, data.data.title, form.opinion)).data
+    if(value.code !== 200) return ElMessage.error(value.data.msg)
+    ElMessage({
+      message: value.data.msg,
+      type: 'success',
+    })
+    router.push({
+      path: '/userCenter/approval/approveList'
+    })
+  } catch (e) {
+    return ElMessage.error('服务端出现致命的错误~')
+  }
 }
 
 function judgeProgress(type: string) {
@@ -122,7 +136,7 @@ onMounted(() => {
     judgePath.value = false
   else judgePath.value = true
   data.data = route.query
-  indexNum.value = judgeProgress(data.data.progress)
+  indexNum.value = judgeProgress(data.data.status)
 })
 </script>
 
