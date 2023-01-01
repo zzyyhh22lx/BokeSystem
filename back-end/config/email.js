@@ -15,7 +15,7 @@ const smtpConfig = {
     secure: true,
     auth: {
       user: '2744732798@qq.com', //邮箱账号
-      pass: 'vkeqorgxopjedeii', //邮箱的授权码
+      pass: '', //邮箱的授权码
     },
 };
 

@@ -88,9 +88,10 @@ create table if not exists articles(
     a_id INT,
     title VARCHAR(50) NOT NULL UNIQUE,
     content VARCHAR(65535),
+    status VARCHAR(10),
     createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	FOREIGN KEY(a_id) REFERENCES columns(c_id)
+	FOREIGN KEY(a_id) REFERENCES columns(id)
 );
 ```
 
@@ -100,12 +101,25 @@ create table if not exists articles(
 
 ### 接口分析：
 
+##### token
+
+```js
+{
+    id, username, permission // 权限
+}
+
+const authorization = ctx.headers.authorization
+// 一般设置将token存在请求头的headers.authorization中
+```
+
+
+
 ##### 登录
 
 - `post('/users/login')`
 
 ```typescript
-interface dataType {
+interface dataType { // 参数
     email:string,
     password:string
 }
@@ -147,6 +161,8 @@ interface dataType {
 { code: 200, data: { id, username, token, msg: '注册成功~' }
 ```
 
+
+
 ##### 获取用户名单
 
 - `get('/usercenter/getusers')`
@@ -154,5 +170,158 @@ interface dataType {
 ```typescript
 // 返回
 { code: 200, data: { result, msg: '获取用户信息成功' } }
+```
+
+
+
+##### 新建专栏
+
+- `post('/usercenter/newcolumn')`
+
+```typescript
+interface dataType { // 需要token
+    column_name:string
+}
+
+// 返回
+{ code: 200, data: { msg: '专栏命名成功' } }
+```
+
+
+
+##### 获取用户所有专栏
+
+- `get('/usercenter/getallcolumn')`
+
+```typescript
+interface dataType { // 需要token
+}
+
+{ code: 200, data: { result, msg: '成功查询所有专栏~' } }
+```
+
+
+
+##### 获得专栏的id值
+
+- `get('/usercenter/getcolumnid')`
+
+```typescript
+interface dataType {
+    c_id:number, // 专栏所属用户的标识(用户的id)
+    column_name:string
+}
+
+//返回
+{ code: 200, data: { msg: '找到目标专栏~', id: result[0].id } }
+```
+
+
+
+##### 删除专栏
+
+- `delete('/usercenter/deletecolumn')`
+
+```typescript
+interface dataType {
+    column_name:string
+}
+
+{ code: 200, data: { msg: '删除目标专栏成功~' } }
+```
+
+
+
+##### 发布文章
+
+- `post('/usercenter/publish')`
+
+```typescript
+set(a_id, [{ // 将数据存入hash表中，审批通过
+    a_id:number, // 属于哪个专栏
+    username:string, // 作者
+    title:string, // a_id确定则仅有唯一值
+    content:string,
+    status: '待审批'|'已驳回'|'已发布',
+    createAt:time
+}])
+```
+
+```typescript
+interface dataType { // 需要token
+    a_id:number, // 对应专栏的id
+    title:string,
+    content:string
+}
+
+// 返回
+{ code: 200, data: { msg: '发布文章请求已提交~' } }
+```
+
+
+
+##### 获取与我相关的审批
+
+- `get('/usercenter/getmyapprovals')`
+
+```typescript
+interface dataType { // 需要token
+}
+
+{ code: 200, data: { data, msg: '获取与我相关的审批成功~' } }
+```
+
+
+
+##### 审批文章
+
+- `post('/usercenter/approve')`
+
+```typescript
+interface dataType { // 需要token
+    a_id:number,
+    title:string,
+    opinion:'yes'|'no'
+}
+
+{ code: 200, data: { msg: '审批成功~' } }
+```
+
+
+
+##### 查询所有审批
+
+- `get('/usercenter/getallapprovals')`
+
+```typescript
+{
+    code: 200, 
+    data: {
+        msg: '所有审批已获得~',
+        data: [{
+            a_id:number, // 属于哪个专栏
+            username:string,
+            title:string, // a_id确定则仅有唯一值
+            content:string,
+            status: '待审批'|'已驳回'|'已发布',
+            createAt:time
+        }] 
+	} 
+}
+```
+
+
+
+##### 删除该审批
+
+- `delete('/usercenter/deleteapproval')`
+
+```typescript
+interface dataType { // 需要token
+    a_id:number,
+    title:string
+}
+
+{ code: 200, data: { msg: '删除审批成功~' } }
 ```
 

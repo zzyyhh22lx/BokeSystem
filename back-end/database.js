@@ -45,13 +45,14 @@ connectionPool.getConnection((err, connection) => {
       )
       connection.execute(
         `create table if not exists articles(
-            id INT PRIMARY KEY AUTO_INCREMENT,
-            a_id INT,
-            title VARCHAR(50) NOT NULL UNIQUE,
-            content VARCHAR(65535),
-            createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            FOREIGN KEY(a_id) REFERENCES columns(c_id)
+          id INT PRIMARY KEY AUTO_INCREMENT,
+          a_id INT,
+          title VARCHAR(50) NOT NULL UNIQUE,
+          content VARCHAR(65535),
+          status VARCHAR(10),
+          createAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updateAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+          FOREIGN KEY(a_id) REFERENCES columns(id)
         );`,
         []
       )

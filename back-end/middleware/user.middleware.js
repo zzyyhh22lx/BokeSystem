@@ -1,6 +1,8 @@
 const userService = require('../service/user.service')
 const { getResult } = require('../utils/handle-error')
 const { getCaptcha } = require('../utils/verify-captcha')
+const { public_key } = require('../config/screct')
+const jwt = require('jsonwebtoken')
 
 const verifyRegister = async (ctx, next) => { // 验证注册
     const {email, password, captcha} = ctx.request.body
@@ -29,8 +31,31 @@ const verifyCaptcha = async (ctx, next) => { // 验证发送验证码
     await next()
 }
 
+const verify_Write_Permission = async (ctx, next) => { // 验证可写权限
+    const authorization = ctx.headers.authorization
+    try {
+        const token = authorization.replace('Bearer', '')
+        const result = jwt.verify(token, public_key, {
+          algorithm: ['RS256']
+        })
+        if(result.permission < 1) return (ctx.response.body = getResult('510'))
+        ctx.token = result
+        await next()
+    } catch(e) {
+        console.log(e)
+        return (ctx.response.body = getResult('508'))
+    }
+}
+
+const verify_Approval_Permission = async (ctx, next) => { // 验证审批权限
+    if(ctx.token.permission < 2) return (ctx.response.body = getResult('510'))
+    await next()
+}
+
 module.exports = {
     verifyRegister,
     verifyUser,
-    verifyCaptcha
+    verifyCaptcha,
+    verify_Write_Permission,
+    verify_Approval_Permission
 }

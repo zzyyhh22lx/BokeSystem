@@ -17,10 +17,7 @@ router.get('/visit', loginController.vistorLogin)
 router.post('/login', verifyUser, loginController.sign)
 
 router.post('/logout', async (ctx, next) => { // 登出
-  ctx.response.body = {
-    code: 200,
-    message : "登出成功"
-  }
+  ctx.response.body = { code: 200, data: { message : "登出成功" } }
 })
 
 router.post('/getcaptcha', verifyCaptcha, captchaController.send)
