@@ -74,7 +74,7 @@ import { ref, reactive, getCurrentInstance, nextTick, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Mes } from './interface'
-import { newColumn, getallcolumn, deletecolumn } from '@/api/center'
+import { publish, newColumn, getallcolumn, deletecolumn } from '@/api/center'
 import { cropText, validateFileName } from '@/utils/tools/index'
 import RePoUploader from '@/components/uploader/RePoUploader.vue'
 
@@ -84,8 +84,30 @@ const { ctx } = getCurrentInstance() as any // 获取 refs 实例对象 (只能�
 const input_bool = ref<boolean>(true)
 const dialogVisible = ref<boolean>(false)
 
-function upload() { // 文件上传
+const a_file = reactive({
+  data: {
+    name: '',
+    id: 0
+  }
+})
+let all_files:any
 
+function upload() { // 文件上传
+  createFile(a_file.data.name, a_file.data.id, (id:number) => {
+    for (let i = 0; i < all_files.length; i++) {
+      const fileReader = new FileReader()
+      fileReader.readAsText(all_files[i])
+      fileReader.onload = async function() {
+        const value:string = this.result
+        try {
+          const result = (await publish(id, all_files[i].name.split('.').shift(), value)).data
+          if(result.code !== 200) return ElMessage.error(result.data.msg)
+        } catch (e) {
+          return ElMessage.error('服务端发生致命的错误~')
+        }
+      }
+    }
+  })
 }
 
 const list = ref<Mes[]>([])
@@ -97,21 +119,20 @@ const file_occupate_list = [1,2,3,4,5,6,7] // 占位文件夹数量
 const hashMap = new Map()
 
 // 解析文件夹
-function selectFolder(e:any) {
+async function selectFolder(e:any) {
   // 文件夹里面所有文件
   let {files} = e.target;
   // 文件夹名称
   let relativePath = files[0].webkitRelativePath;      
-  let folderName = relativePath.split('/')[0];
-  // 文件信息转换成FormData结构遍历上传
-  for (let i = 0; i < files.length; i++) {
-    let formData = new FormData();      
-    formData.append('file', files[i])
-    for (let [a, b] of formData.entries()) {
-      console.log(a, b, '--------------');
-    }
+  let folderName = relativePath.split('/')[0]; // 文件夹名字
+  a_file.data.name = folderName
+  try {
+    const result = (await getallcolumn()).data
+    a_file.data.id = result.data.result.length
+  } catch (e) {
+    return ElMessage.error('服务端发生致命的错误~')
   }
-  folderName
+  all_files = files
 }
 
 // 按enter
@@ -135,9 +156,22 @@ async function verify(e:any):Promise<any> {
   }
 
   //   文件名合法进行的操作
+  createFile(value, id)
+
+  function reuse(e:any, message:string):void {
+    e.target.focus()
+    ElMessage({
+      message,
+      type: 'warning',
+    })
+  }
+}
+
+async function createFile(value:string, id:number, fn:any = () => {}) {
   try {
     const result = (await newColumn(value)).data
     if(result.code !== 200) return ElMessage.error(result.data.msg)
+    fn(result.data.id)
     file_list.list[id].txt = value // getAttribute('id')获取list的input在数组的位置
     hashMap.set(value, value)
     input_bool.value = true
@@ -146,15 +180,8 @@ async function verify(e:any):Promise<any> {
       type: 'success'
     })
   } catch (e) {
+    console.log(e)
     return ElMessage.error('服务端发生致命的错误~')
-  }
-
-  function reuse(e:any, message:string):void {
-    e.target.focus()
-    ElMessage({
-      message,
-      type: 'warning',
-    })
   }
 }
 

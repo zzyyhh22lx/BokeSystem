@@ -16,8 +16,8 @@ class usercenterController {
         const { id } = ctx.token
         const result = await userService.findByColumnName(column_name, id)
         if(result.length) return (ctx.response.body = getResult('506'))
-        await userService.writeColumn(ctx.token.id, column_name)
-        ctx.body = { code: 200, data: { msg: '新建专栏成功~' } }
+        const data = await userService.writeColumn(ctx.token.id, column_name)
+        ctx.body = { code: 200, data: { msg: '新建专栏成功~', id: data.insertId } }
     }
     async getAllColumn(ctx, next) { // 获取用户所有专栏
         const { id } = ctx.token
@@ -43,6 +43,18 @@ class usercenterController {
         const { username } = ctx.token
         if(!setArticle(a_id, username, title, content)) return (ctx.response.body = getResult('506')) // 名字已存在
         ctx.body = { code: 200, data: { msg: '发布文章请求已提交~' } }
+    }
+    async getAllArticles(ctx, next) { // 获取用户所有文章
+        const { id } = ctx.request.query
+        if(!id) return (ctx.response.body = getResult('507')) // 上传内容不为空
+        const result = await userService.finAllArticles(id)
+        ctx.body = { code: 200, data: { result, msg: '获取用户文章成功~' } }
+    }
+    async getColumnArticles(ctx, next) { // 获取目标专栏所有文章
+        const { a_id } = ctx.request.query
+        if(!a_id) return (ctx.response.body = getResult('507')) // 上传内容不为空
+        const result = await userService.finColumnArticles(a_id)
+        ctx.body = { code: 200, data: { result, msg: '获取专栏文章成功~' } }
     }
     async getMyApprovals(ctx, next) {
         const { username } = ctx.token

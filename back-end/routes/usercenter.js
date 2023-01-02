@@ -18,6 +18,10 @@ router.delete('/deletecolumn', verify_Write_Permission, usercenterController.del
 
 router.post('/publish', verify_Write_Permission, usercenterController.publish)
 
+router.get('/getallarticles', usercenterController.getAllArticles)
+
+router.get('/getcolumnarticles', usercenterController.getColumnArticles)
+
 router.get('/getmyapprovals', verify_Write_Permission, usercenterController.getMyApprovals)
 
 router.post('/approve', verify_Write_Permission, verify_Approval_Permission, usercenterController.approve)

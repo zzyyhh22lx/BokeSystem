@@ -96,6 +96,14 @@ const asyncRoutes: Array<RouteRecordRaw> = [
             }
           },
           {
+            path: '/userCenter/articles',
+            name: 'userArticles',
+            component: () => import('@/views/user-center/list/md-articles.vue'),
+            meta: {
+              title: 'articles'
+            }
+          },
+          {
             path: '/userCenter/application/applicationProgress',
             name: 'applicationProgress',
             component: () => import('@/views/user-center/progress/user-progress.vue'),

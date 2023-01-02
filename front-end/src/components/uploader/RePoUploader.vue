@@ -22,7 +22,7 @@
             <el-input
             v-model="form.title"
             maxlength="100"
-            placeholder="请输入文章标题"
+            placeholder="请输入文章描述"
             />
           </el-form-item>
         </el-form>

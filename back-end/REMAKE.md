@@ -184,7 +184,7 @@ interface dataType { // 需要token
 }
 
 // 返回
-{ code: 200, data: { msg: '专栏命名成功' } }
+{ code: 200, data: { msg: '专栏命名成功', id } } // 返回专栏id
 ```
 
 
@@ -195,6 +195,7 @@ interface dataType { // 需要token
 
 ```typescript
 interface dataType { // 需要token
+    
 }
 
 { code: 200, data: { result, msg: '成功查询所有专栏~' } }
@@ -257,6 +258,35 @@ interface dataType { // 需要token
 // 返回
 { code: 200, data: { msg: '发布文章请求已提交~' } }
 ```
+
+
+
+##### 获取与用户相关的文章
+
+- `get('/usercenter/getallarticles')`
+
+```typescript
+interface dataType {
+    id:number,//用户id
+}
+{ code: 200, data: { result, msg: '获取相关的文章成功~' } }
+```
+
+
+
+##### 获取目标专栏的文章
+
+- `get('/usercenter/getcolumnarticles')`
+
+```typescript
+interface dataType {
+    c_id:number,//专栏id
+}
+
+{ code: 200, data: { result, msg: '获取目标专栏文章成功~' } }
+```
+
+
 
 
 

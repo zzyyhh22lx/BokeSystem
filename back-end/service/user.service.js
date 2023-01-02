@@ -29,6 +29,16 @@ class UserService {
         const [values] = await connection.execute(statement, [c_id])
         return values
     }
+    async finAllArticles(id) { // 获取用户所有文章(右联结)
+        const statement = `select users.username, columns.c_id, columns.column_name, articles.title, articles.content, articles.status, articles.createAt articles.id from users right join columns on users.id = columns.c_id and users.id = ? right join articles on columns.id = articles.a_id`
+        const [values] = await connection.execute(statement, [id])
+        return values
+    }
+    async finColumnArticles(a_id) { // 获取目标专栏所有文章
+        const statement = `select * from articles where a_id = ?`
+        const [values] = await connection.execute(statement, [a_id])
+        return values
+    }
     async deleteColumn(column_name) {
         const statement = `delete from columns where column_name = ?`
         const [values] = await connection.execute(statement, [column_name])

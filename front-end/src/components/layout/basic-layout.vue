@@ -84,7 +84,6 @@ const users = reactive([] as any[]); // 断言类型处理
 onMounted(async () => {
   try {
     const result = await getUsers()
-    console.log(result)
     const { data } = result.data
     data.result.forEach((user:string) => {
       if(decodeURIComponent(getCookie('user_name')) !== user && user !== '游客模式') // 排除自己

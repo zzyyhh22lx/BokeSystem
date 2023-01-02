@@ -5,11 +5,13 @@ const api = {
   getallapprovals: '/usercenter/getallapprovals',
   getmyapprovals: '/usercenter/getmyapprovals',
   getallcolumn: '/usercenter/getallcolumn',
+  getcolumnid: '/usercenter/getcolumnid',
   approve: '/usercenter/approve',
   deleteapproval: '/usercenter/deleteapproval',
   newColumn: '/usercenter/newcolumn',
   deletecolumn: '/usercenter/deletecolumn',
-  publish: '/usercenter/publish'
+  publish: '/usercenter/publish',
+  getcolumnarticles: '/usercenter/getcolumnarticles'
 }
 
 export async function getUsers() {
@@ -86,6 +88,26 @@ export async function publish(a_id:number, title:string, content:string) {
     method: 'post',
     data: {
       a_id, title, content
+    }
+  })
+}
+
+export async function getcolumnarticles(a_id:number) {
+  return createAxios({
+    url: api.getcolumnarticles,
+    method: 'get',
+    params: {
+      a_id
+    }
+  })
+}
+
+export async function getcolumnid(c_id:number, column_name:string) {
+  return createAxios({
+    url: api.getcolumnid,
+    method: 'get',
+    params: {
+      c_id, column_name
     }
   })
 }

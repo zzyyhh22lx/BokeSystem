@@ -2,7 +2,7 @@
     <el-card shadow="always">
         <h1>{{ route.query.txt }}: </h1>
         <div class="file_layout">
-            <div class="file_one" v-for="item in file_list.list" :key="item.name">
+            <div class="file_one" v-for="item in file_list.list" :key="item.title" @dblclick="pushView(item)">
                 <div><img src="@/assets/svg/markdown.svg" alt="md文件"></div>
                 <el-popconfirm
                     title="你要永久删除该文件吗?"
@@ -14,17 +14,17 @@
                 </el-popconfirm>
                 <div>
                     <el-popover
-                        v-if="item.name.length > 5"
+                        v-if="item.title.length > 5"
                         placement="bottom"
                         trigger="hover"
                         effect="dark"
-                        :content="item.name"
+                        :content="item.title"
                     >
                         <template #reference>
-                            <span class="span_txt">{{ cropText(item.name, 5) }}</span>
+                            <span class="span_txt">{{ cropText(item.title, 5) }}</span>
                         </template>
                     </el-popover>
-                    <span class="span_txt" v-else>{{ cropText(item.name, 5) }}</span>
+                    <span class="span_txt" v-else>{{ cropText(item.title, 5) }}</span>
                 </div>
             </div>
             <div class="file_one" @click="dialogVisible = true">
@@ -76,15 +76,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { useRoute } from 'vue-router'
-import { publish } from '@/api/center'
+import { ref, reactive, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { publish, getcolumnarticles } from '@/api/center'
 import { ElMessage, UploadUserFile } from 'element-plus'
 import { TitleMes } from './interface'
 import { cropText } from '@/utils/tools/index'
 import RePoUploader from '@/components/uploader/RePoUploader.vue'
 
 const route = useRoute()
+const router = useRouter()
 
 const dialogVisible = ref<boolean>(false)
 
@@ -98,7 +99,7 @@ const hashMap = new Map()
 
 // 删除文件夹
 function deleteFile(id:number):void {
-  hashMap.delete(file_list.list[id].name)
+  hashMap.delete(file_list.list[id].title)
   file_list.list.splice(id, 1)
 
   ElMessage({
@@ -112,13 +113,14 @@ function deleteFile(id:number):void {
 }
 
 const fileList = ref<UploadUserFile[]>([])
+const title = ref('')
 const fileNameBool = ref(false)
 const data = ref<any>('') // 存放解析的数据
 
-const upload = async (title:string) => {
+const upload = async () => {
   if(fileNameBool.value) {
     try {
-      const result = (await publish(parseInt(route.query.id), title, data.value)).data
+      const result = (await publish(parseInt(route.query.id), title.value, data.value)).data
       if(result.code !== 200) return ElMessage.error(result.data.msg)
       ElMessage({
         message: result.data.msg,
@@ -139,6 +141,7 @@ const handleUpload = (uploadFiles: any) => {
     fileNameBool.value = true
     fileReader.onload = function() {
       data.value = this.result
+      title.value = uploadFiles.file.name.split('.').shift()
     }
   }
 }
@@ -156,6 +159,27 @@ function download() {
   link.click()
   document.body.removeChild(link)
 }
+
+// 双击跳转
+function pushView(query: any):void {
+  let path = '/userCenter/articles'
+  router.push({
+    path,
+    query
+  })
+}
+
+onMounted(async () => {
+  try {
+    const result = (await getcolumnarticles(parseInt(route.query.id))).data
+    if(result.code !== 200) return ElMessage.error(result.data.msg)
+    result.data.result.forEach((item:any) => {
+      file_list.list.push(item)
+    })
+  } catch (e) {
+    return ElMessage.error('服务端发生致命的错误~')
+  }
+})
 </script>
 
 <style scoped lang="scss">

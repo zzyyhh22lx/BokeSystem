@@ -5,7 +5,8 @@ export interface Mes {
 }
 
 export interface TitleMes {
-    name: string, // 文件名
+    title: string, // 文件名
     id: number,
+    createAt:string,
     content: string // 内容
 }
