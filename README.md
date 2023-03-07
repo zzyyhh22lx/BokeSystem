@@ -20,8 +20,6 @@ git clone git@github.com:zzyyhh22lx/Vue3Boke.git
 
 ### 项目体验地址：
 
-[http://47.113.231.177](http://47.113.231.177/)
-
 
 
 ![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ddb635119927466a864c3849d4097898~tplv-k3u1fbpfcp-watermark.image?)
